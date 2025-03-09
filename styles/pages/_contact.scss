@@ -1,0 +1,242 @@
+.contact-page {
+  padding: $spacing-8 0;
+
+  &__container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 $spacing-4;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-8;
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    margin-bottom: $spacing-3;
+  }
+
+  &__description {
+    font-size: $font-size-md;
+    color: $color-text-light;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-8;
+  }
+
+  &__form {
+    background-color: $color-background;
+    padding: $spacing-6;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+    order: 1;
+  }
+
+  &__info {
+    order: 2;
+  }
+
+  &__form-title {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-4;
+  }
+
+  &__form-group {
+    margin-bottom: $spacing-4;
+  }
+
+  &__label {
+    display: block;
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-2;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: $spacing-3;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    background-color: $color-background;
+    transition: border-color $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: $color-secondary;
+    }
+  }
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  &__submit {
+    margin-top: $spacing-4;
+    width: 100%;
+  }
+
+  &__form-message {
+    margin-top: $spacing-4;
+    padding: $spacing-3;
+    border-radius: $border-radius-md;
+    text-align: center;
+
+    &--success {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--error {
+      background-color: rgba($color-error, 0.1);
+      color: $color-error;
+    }
+  }
+
+  &__info-title {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-3;
+  }
+
+  &__info-text {
+    margin-bottom: $spacing-4;
+    color: $color-text-light;
+  }
+
+  &__contact-details {
+    margin-bottom: $spacing-6;
+  }
+
+  &__contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-3;
+  }
+
+  &__contact-icon {
+    margin-right: $spacing-3;
+    color: $color-secondary;
+  }
+
+  &__social {
+    margin-top: $spacing-6;
+  }
+
+  &__social-title {
+    font-size: $font-size-md;
+    margin-bottom: $spacing-3;
+  }
+
+  &__social-links {
+    display: flex;
+    gap: $spacing-3;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+    background-color: $color-secondary;
+    color: $color-primary;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: $color-primary;
+      color: $color-background;
+    }
+  }
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-12 0;
+
+    &__container {
+      padding: 0 $container-padding;
+      max-width: $container-max-width;
+    }
+
+    &__header {
+      margin-bottom: $spacing-12;
+    }
+
+    &__title {
+      font-size: $font-size-4xl;
+      margin-bottom: $spacing-4;
+    }
+
+    &__description {
+      font-size: $font-size-lg;
+      max-width: 600px;
+    }
+
+    &__content {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-10;
+    }
+
+    &__form {
+      padding: $spacing-8;
+      order: 2; // Na desktop formularz po prawej
+    }
+
+    &__info {
+      order: 1; // Na desktop info po lewej
+    }
+
+    &__form-title {
+      font-size: $font-size-xl;
+      margin-bottom: $spacing-6;
+    }
+
+    &__textarea {
+      min-height: 150px;
+    }
+
+    &__info-title {
+      font-size: $font-size-xl;
+      margin-bottom: $spacing-4;
+    }
+
+    &__info-text {
+      margin-bottom: $spacing-6;
+    }
+
+    &__contact-details {
+      margin-bottom: $spacing-8;
+    }
+
+    &__contact-item {
+      margin-bottom: $spacing-4;
+    }
+
+    &__social {
+      margin-top: $spacing-8;
+    }
+
+    &__social-title {
+      font-size: $font-size-lg;
+      margin-bottom: $spacing-4;
+    }
+
+    &__social-links {
+      gap: $spacing-4;
+    }
+
+    &__social-link {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: $spacing-16 0;
+  }
+}

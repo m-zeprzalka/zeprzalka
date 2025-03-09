@@ -1,0 +1,11 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ["localhost"], // Dodaj tutaj również domeny dla hostowanych obrazów
+  },
+  sassOptions: {
+    includePaths: ["./styles"], // Ścieżki do stylów SCSS
+  },
+};
+
+module.exports = nextConfig;

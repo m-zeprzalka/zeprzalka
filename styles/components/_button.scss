@@ -1,0 +1,141 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-3 $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  border-radius: $border-radius-md;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all $transition-base;
+  white-space: nowrap;
+  //width: 100%; // Full width na mobile
+
+  @media (min-width: $breakpoint-sm) {
+    width: auto; // Normalna szerokość na większych ekranach
+    padding: $spacing-3 $spacing-6;
+    font-size: $font-size-md;
+  }
+
+  &:disabled,
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Button sizes
+  &--sm {
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-xs;
+
+    @media (min-width: $breakpoint-sm) {
+      padding: $spacing-2 $spacing-4;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &--lg {
+    padding: $spacing-3 $spacing-6;
+    font-size: $font-size-md;
+
+    @media (min-width: $breakpoint-sm) {
+      padding: $spacing-4 $spacing-8;
+      font-size: $font-size-lg;
+    }
+  }
+
+  // Button variations
+  &--primary {
+    background-color: $color-primary;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+      background-color: darken($color-primary, 10%);
+      color: #fff;
+    }
+
+    &:active {
+      background-color: darken($color-primary, 15%);
+    }
+  }
+
+  &--secondary {
+    background-color: $color-secondary;
+    color: $color-primary;
+
+    &:hover,
+    &:focus {
+      background-color: darken($color-secondary, 10%);
+    }
+
+    &:active {
+      background-color: darken($color-secondary, 15%);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    border-color: $color-primary;
+    color: $color-primary;
+
+    &:hover,
+    &:focus {
+      background-color: rgba($color-primary, 0.1);
+    }
+
+    &:active {
+      background-color: rgba($color-primary, 0.2);
+    }
+  }
+
+  &--outline-secondary {
+    background-color: transparent;
+    border-color: $color-secondary;
+    color: $color-primary;
+
+    &:hover,
+    &:focus {
+      background-color: rgba($color-secondary, 0.1);
+    }
+
+    &:active {
+      background-color: rgba($color-secondary, 0.2);
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    color: $color-primary;
+    padding-left: $spacing-2;
+    padding-right: $spacing-2;
+
+    &:hover,
+    &:focus {
+      background-color: rgba($color-primary, 0.1);
+    }
+
+    &:active {
+      background-color: rgba($color-primary, 0.2);
+    }
+  }
+
+  // Full width button (tylko gdy jawnie zażądano)
+  &--full {
+    width: 100%;
+  }
+
+  // Button with icon
+  &__icon {
+    margin-right: $spacing-2;
+
+    &--right {
+      margin-right: 0;
+      margin-left: $spacing-2;
+    }
+  }
+}

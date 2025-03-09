@@ -1,0 +1,19 @@
+// Base styles
+@import "base/variables";
+@import "base/reset";
+@import "base/typography";
+
+// Layouts
+@import "layout/container";
+@import "layout/header";
+@import "layout/footer";
+
+// Components
+@import "components/button";
+@import "components/hero";
+@import "components/blog-card";
+@import "components/glitch-effect"; // Import stylów dla efektu glitch
+// Pages
+@import "pages/home";
+@import "pages/blog";
+@import "pages/contact";

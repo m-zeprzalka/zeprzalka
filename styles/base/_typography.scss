@@ -1,0 +1,183 @@
+// Font face declarations
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-Regular.woff2") format("woff2"),
+    url("/fonts/PublicSans-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-Medium.woff2") format("woff2"),
+    url("/fonts/PublicSans-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-SemiBold.woff2") format("woff2"),
+    url("/fonts/PublicSans-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/PublicSans-Bold.woff2") format("woff2"),
+    url("/fonts/PublicSans-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-size: $font-size-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-primary;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-base;
+  color: $color-text;
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+}
+
+// Mobilne rozmiary (domyślne)
+h1 {
+  font-size: $font-size-3xl;
+}
+
+h2 {
+  font-size: $font-size-2xl;
+}
+
+h3 {
+  font-size: $font-size-xl;
+}
+
+// Desktopowe rozmiary (większe ekrany)
+@media (min-width: $breakpoint-md) {
+  h1 {
+    font-size: $font-size-4xl;
+  }
+
+  h2 {
+    font-size: $font-size-3xl;
+  }
+
+  h3 {
+    font-size: $font-size-2xl;
+  }
+}
+
+h4 {
+  font-size: $font-size-xl;
+}
+
+h5 {
+  font-size: $font-size-lg;
+}
+
+h6 {
+  font-size: $font-size-md;
+}
+
+// Paragraphs
+p {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Links
+a {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color $transition-base;
+
+  &:hover {
+    color: darken($color-primary, 10%);
+  }
+}
+
+// Lists
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+  padding-left: $spacing-6;
+
+  li {
+    margin-bottom: $spacing-2;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Blockquotes
+blockquote {
+  padding: $spacing-4;
+  margin: 0 0 $spacing-4;
+  border-left: 4px solid $color-secondary;
+  background-color: lighten($color-secondary, 30%);
+
+  p {
+    margin-bottom: 0;
+    font-style: italic;
+  }
+}
+
+// Code
+code {
+  font-family: monospace;
+  padding: $spacing-1 $spacing-2;
+  font-size: 0.9em;
+  background-color: #f7f7f7;
+  border-radius: $border-radius-sm;
+}
+
+pre {
+  margin: 0 0 $spacing-4;
+  padding: $spacing-4;
+  background-color: #f7f7f7;
+  border-radius: $border-radius-md;
+  overflow-x: auto;
+
+  code {
+    padding: 0;
+    background-color: transparent;
+  }
+}
+
+// Strong, emphasis
+strong {
+  font-weight: $font-weight-bold;
+}
+
+em {
+  font-style: italic;
+}

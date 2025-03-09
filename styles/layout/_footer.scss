@@ -1,0 +1,50 @@
+.footer {
+  background-color: $color-background;
+  padding: $spacing-6 0;
+  margin-top: $spacing-10;
+  border-top: 1px solid $color-border;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    text-align: center;
+  }
+
+  &__copyright {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+  }
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-4;
+  }
+
+  &__link {
+    color: $color-text-light;
+    transition: color $transition-base;
+    font-size: $font-size-sm;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-10 0;
+    margin-top: $spacing-16;
+
+    &__container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+
+    &__links {
+      gap: $spacing-6;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.blog-preview {
+  padding: $spacing-8 0;
+
+  &__title {
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-6;
+    text-align: center;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-12 0;
+
+    &__title {
+      font-size: $font-size-3xl;
+      margin-bottom: $spacing-8;
+      text-align: left;
+    }
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: $spacing-16 0;
+  }
+}

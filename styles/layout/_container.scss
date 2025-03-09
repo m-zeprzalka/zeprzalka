@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-4; // Mniejszy padding na mobile
+
+  @media (min-width: $breakpoint-md) {
+    padding: 0 $container-padding;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    max-width: $container-max-width;
+  }
+}
+
+// Kontenery dla różnych sekcji strony
+.hero__container,
+.blog-preview__container,
+.header__container,
+.footer__container {
+  @extend .container;
+}

@@ -1,0 +1,179 @@
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: $color-background;
+  z-index: $z-index-sticky;
+  padding: $spacing-4 0;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    font-weight: $font-weight-bold;
+    font-size: $font-size-md;
+
+    &-link {
+      color: $color-primary;
+      text-decoration: none;
+      transition: color $transition-base;
+
+      &:hover {
+        color: $color-text-light;
+      }
+
+      span {
+        font-size: $font-size-xl;
+        color: $color-success;
+      }
+    }
+  }
+
+  // Mobile menu button - poprawiona wersja z większym obszarem klikalnym
+  &__mobile-toggle {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; // Centrowanie ikony w przycisku
+
+    &-icon {
+      display: block;
+      position: relative;
+      width: 24px;
+      height: 2px;
+      background-color: $color-primary;
+      transition: all $transition-base;
+      margin: 0 auto; // Upewnia się, że pasek jest wycentrowany
+
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: $color-primary;
+        transition: all $transition-base;
+        left: 0; // Upewnia się, że paski są wyrównane z lewej strony
+      }
+
+      &:before {
+        top: -8px;
+      }
+
+      &:after {
+        bottom: -8px;
+      }
+
+      &--open {
+        background-color: transparent;
+
+        &:before {
+          transform: rotate(45deg);
+          top: 0;
+        }
+
+        &:after {
+          transform: rotate(-45deg);
+          bottom: 0;
+        }
+      }
+    }
+  }
+
+  // Navigation na mobile - poprawiona wersja eliminująca martwy piksel
+  &__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: $color-background;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height $transition-base, padding $transition-base;
+    box-shadow: $shadow-md;
+    border-top: none; // Usunięcie potencjalnej górnej granicy
+    margin-top: -1px; // Negatywny margin, aby "schować" górną linię cienia
+    &--open {
+      max-height: 100vh;
+      padding: $spacing-4 0;
+    }
+
+    &-list {
+      flex-direction: column;
+      padding: 0 $spacing-4;
+      display: flex;
+      list-style: none;
+      margin: 0;
+    }
+
+    &-item {
+      margin: $spacing-4 0;
+    }
+
+    &-link {
+      color: $color-primary;
+      text-decoration: none;
+      font-weight: $font-weight-regular;
+      position: relative;
+      transition: color $transition-base;
+
+      &:hover {
+        color: $color-text-light;
+      }
+
+      &--active {
+        font-weight: $font-weight-semibold;
+
+        &:after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          background-color: $color-primary;
+          bottom: -5px;
+          left: 0;
+        }
+      }
+    }
+  }
+
+  // Desktop styles
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-6 0;
+
+    &__mobile-toggle {
+      display: none;
+    }
+
+    &__nav {
+      position: static;
+      max-height: none;
+      width: auto;
+      background-color: transparent;
+      padding: 0;
+      overflow: visible;
+      box-shadow: none;
+
+      &-list {
+        flex-direction: row;
+        padding: 0;
+      }
+
+      &-item {
+        margin: 0 0 0 $spacing-6;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
