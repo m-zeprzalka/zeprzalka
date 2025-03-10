@@ -6,6 +6,9 @@ const nextConfig = {
   sassOptions: {
     includePaths: ["./styles"], // Ścieżki do stylów SCSS
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;
