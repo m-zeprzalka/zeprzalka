@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["localhost"], // Dodaj tutaj również domeny dla hostowanych obrazów
+    domains: ["localhost", "cdn.sanity.io"], // Dodałem cdn.sanity.io do listy dozwolonych domen
   },
   sassOptions: {
     includePaths: ["./styles"], // Ścieżki do stylów SCSS

@@ -1,106 +1,112 @@
-import { prisma } from "./prisma";
+import { sanityClient, urlFor } from "./sanity";
 import { createSlug } from "./utils";
+import { Post } from "./types"; // Zmiana na poprawny import
 
-// Definicje typów zgodne z Prisma
-export type Post = {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt?: string | null;
-  content?: string | null;
-  coverImage?: string | null;
-  published: boolean;
-  featuredPost: boolean;
-  createdAt: string;
-  updatedAt: string;
-  authorId: string;
-  categories: {
-    id: string;
-    name: string;
-    slug: string;
-  }[];
-  author: {
-    id: string;
-    name: string | null;
-    image: string | null;
+// Pomocnicza funkcja do mapowania postów z Sanity na nasz format
+function mapPost(post: any): Post {
+  if (!post) {
+    console.error("Próba mapowania null/undefined post");
+    throw new Error("Nie można mapować pustego postu");
+  }
+
+  console.log(
+    "Mapowanie postu:",
+    post._id,
+    post.title,
+    "slug:",
+    post.slug?.current
+  );
+
+  return {
+    id: post._id,
+    title: post.title || "Bez tytułu",
+    slug: post.slug?.current || createSlug(post.title || "bez-tytulu"),
+    excerpt: post.excerpt,
+    // Ważna zmiana - sprawdź, czy content jest tablicą (format Portable Text)
+    content: Array.isArray(post.content) ? post.content : [],
+    coverImage: post.coverImage ? urlFor(post.coverImage).url() : null,
+    published: Boolean(post.published),
+    featuredPost: Boolean(post.featuredPost),
+    createdAt: post.createdAt || new Date().toISOString(),
+    updatedAt: post.updatedAt || new Date().toISOString(),
+    authorId: post.author?._id || "",
+    author: {
+      id: post.author?._id || "",
+      name: post.author?.name || "Nieznany autor",
+      image: post.author?.image ? urlFor(post.author.image).url() : null,
+    },
+    categories: post.categories
+      ? post.categories.map((cat: any) => ({
+          id: cat._id,
+          name: cat.name || "Bez nazwy",
+          slug: cat.slug?.current || "bez-kategorii",
+        }))
+      : [],
   };
-};
-
-// Funkcje dostępu do danych
+}
 
 /**
  * Pobieranie najnowszych postów
  */
 export async function getLatestPosts(limit = 10): Promise<Post[]> {
-  const posts = await prisma.post.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: limit,
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
+  const posts = await sanityClient.fetch(`
+    *[_type == "post" && published == true] | order(createdAt desc)[0...${limit}] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      content,
+      coverImage,
+      published,
+      featuredPost,
+      createdAt,
+      updatedAt,
+      author->{
+        _id,
+        name,
+        image
       },
-      author: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
+      categories[]->{
+        _id,
+        name,
+        slug
+      }
+    }
+  `);
 
-  return posts.map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-    updatedAt: post.updatedAt.toISOString(),
-  }));
+  return posts.map(mapPost);
 }
 
 /**
  * Pobieranie wyróżnionych postów
  */
 export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
-  const posts = await prisma.post.findMany({
-    where: {
-      published: true,
-      featuredPost: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: limit,
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
+  const posts = await sanityClient.fetch(`
+    *[_type == "post" && published == true && featuredPost == true] | order(createdAt desc)[0...${limit}] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      content,
+      coverImage,
+      published,
+      featuredPost,
+      createdAt,
+      updatedAt,
+      author->{
+        _id,
+        name,
+        image
       },
-      author: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
+      categories[]->{
+        _id,
+        name,
+        slug
+      }
+    }
+  `);
 
-  return posts.map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-    updatedAt: post.updatedAt.toISOString(),
-  }));
+  return posts.map(mapPost);
 }
 
 /**
@@ -116,79 +122,52 @@ export async function getPaginatedPosts(options: {
 
   const skip = (page - 1) * limit;
 
-  // Budowanie zapytania where
-  const where: any = {
-    published: true,
-  };
+  // Budowanie zapytania GROQ
+  let query = '*[_type == "post" && published == true';
 
   if (categorySlug) {
-    where.categories = {
-      some: {
-        slug: categorySlug,
-      },
-    };
+    query += ` && count(categories[slug.current == "${categorySlug}"]) > 0`;
   }
 
   if (searchQuery) {
-    where.OR = [
-      {
-        title: {
-          contains: searchQuery,
-          mode: "insensitive",
-        },
-      },
-      {
-        excerpt: {
-          contains: searchQuery,
-          mode: "insensitive",
-        },
-      },
-      {
-        content: {
-          contains: searchQuery,
-          mode: "insensitive",
-        },
-      },
-    ];
+    query += ` && (title match "*${searchQuery}*" || excerpt match "*${searchQuery}*" || content match "*${searchQuery}*")`;
   }
 
-  // Pobieranie postów z uwzględnieniem filtrów
-  const [posts, total] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      orderBy: {
-        createdAt: "desc",
+  query += `] | order(createdAt desc)`;
+
+  // Pobieranie postów z uwzględnieniem paginacji
+  const posts = await sanityClient.fetch(`
+    ${query}[${skip}...${skip + limit}] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      content,
+      coverImage,
+      published,
+      featuredPost,
+      createdAt,
+      updatedAt,
+      author->{
+        _id,
+        name,
+        image
       },
-      skip,
-      take: limit,
-      include: {
-        categories: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
-        author: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
-        },
-      },
-    }),
-    prisma.post.count({ where }),
-  ]);
+      categories[]->{
+        _id,
+        name,
+        slug
+      }
+    }
+  `);
+
+  // Pobieranie całkowitej liczby postów
+  const total = await sanityClient.fetch(`count(${query})`);
 
   const totalPages = Math.ceil(total / limit);
 
   return {
-    posts: posts.map((post) => ({
-      ...post,
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-    })),
+    posts: posts.map(mapPost),
     total,
     totalPages,
   };
@@ -198,146 +177,68 @@ export async function getPaginatedPosts(options: {
  * Pobieranie kategorii
  */
 export async function getCategories() {
-  return await prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  const categories = await sanityClient.fetch(`
+    *[_type == "category"] | order(name asc) {
+      _id,
+      name,
+      slug
+    }
+  `);
+
+  return categories.map((cat: any) => ({
+    id: cat._id,
+    name: cat.name,
+    slug: cat.slug?.current || createSlug(cat.name || "bez-nazwy"),
+  }));
 }
 
 /**
  * Pobieranie pojedynczego posta po slug
  */
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const post = await prisma.post.findUnique({
-    where: {
-      slug,
-    },
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
+  try {
+    const post = await sanityClient.fetch(
+      `
+      *[_type == "post" && slug.current == $slug][0] {
+        _id,
+        title,
+        slug,
+        excerpt,
+        content,
+        coverImage,
+        published,
+        featuredPost,
+        createdAt,
+        updatedAt,
+        author->{
+          _id,
+          name,
+          image
         },
-      },
-      author: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
+        categories[]->{
+          _id,
+          name,
+          slug
+        }
+      }
+    `,
+      { slug }
+    );
 
-  if (!post) return null;
+    // Usuń lub zmodyfikuj logowanie, które może powodować problemy z serializacją
+    // console.log("Otrzymany post z Sanity:", post);
 
-  return {
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-    updatedAt: post.updatedAt.toISOString(),
-  };
-}
+    if (!post) {
+      return null;
+    }
 
-/**
- * Tworzenie nowego posta
- */
-export async function createPost(data: {
-  title: string;
-  excerpt?: string;
-  content?: string;
-  coverImage?: string;
-  authorId: string;
-  categoryIds?: string[];
-  published?: boolean;
-  featuredPost?: boolean;
-}) {
-  const { title, categoryIds = [], ...rest } = data;
-
-  // Tworzenie slug z tytułu
-  const slug = createSlug(title);
-
-  return await prisma.post.create({
-    data: {
-      title,
-      slug,
-      ...rest,
-      categories: {
-        connect: categoryIds.map((id) => ({ id })),
-      },
-    },
-    include: {
-      categories: true,
-      author: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
-}
-
-/**
- * Aktualizacja posta
- */
-export async function updatePost(
-  id: string,
-  data: {
-    title?: string;
-    excerpt?: string;
-    content?: string;
-    coverImage?: string;
-    published?: boolean;
-    featuredPost?: boolean;
-    categoryIds?: string[];
+    const mappedPost = mapPost(post);
+    // console.log("Zmapowany post:", mappedPost);
+    return mappedPost;
+  } catch (error) {
+    console.error("Błąd podczas pobierania posta:", error);
+    return null;
   }
-) {
-  const { title, categoryIds, ...rest } = data;
-
-  // Jeśli tytuł się zmienił, aktualizuj również slug
-  const slug = title ? createSlug(title) : undefined;
-
-  // Przygotowanie danych do aktualizacji
-  const updateData: any = {
-    ...rest,
-  };
-
-  if (title) {
-    updateData.title = title;
-    updateData.slug = slug;
-  }
-
-  if (categoryIds) {
-    updateData.categories = {
-      set: [], // Najpierw usuwamy wszystkie istniejące połączenia
-      connect: categoryIds.map((id) => ({ id })),
-    };
-  }
-
-  return await prisma.post.update({
-    where: {
-      id,
-    },
-    data: updateData,
-    include: {
-      categories: true,
-      author: true,
-    },
-  });
-}
-
-/**
- * Usuwanie posta
- */
-export async function deletePost(id: string) {
-  return await prisma.post.delete({
-    where: {
-      id,
-    },
-  });
 }
 
 /**
@@ -347,52 +248,54 @@ export async function getRelatedPosts(
   postId: string,
   limit = 3
 ): Promise<Post[]> {
-  // Pobierz kategorie obecnego posta
-  const currentPost = await prisma.post.findUnique({
-    where: { id: postId },
-    include: { categories: true },
-  });
+  // Pobieramy najpierw kategorie bieżącego posta
+  const post = await sanityClient.fetch(
+    `
+    *[_type == "post" && _id == $postId][0] {
+      categories[]->._id
+    }
+  `,
+    { postId }
+  );
 
-  if (!currentPost) return [];
+  if (!post || !post.categories || post.categories.length === 0) {
+    return [];
+  }
 
-  const categoryIds = currentPost.categories.map((cat) => cat.id);
+  // Tworzymy tablicę ID kategorii
+  const categoryIds = post.categories.map((cat: any) => cat);
 
-  // Znajdź posty w tych samych kategoriach, ale bez obecnego posta
-  const posts = await prisma.post.findMany({
-    where: {
-      id: { not: postId },
-      published: true,
-      categories: {
-        some: {
-          id: { in: categoryIds },
-        },
+  // Pobieramy powiązane posty
+  const relatedPosts = await sanityClient.fetch(
+    `
+    *[_type == "post" && _id != $postId && published == true && count(categories[_id in $categoryIds]) > 0] | order(createdAt desc)[0...${limit}] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      content,
+      coverImage,
+      published,
+      featuredPost,
+      createdAt,
+      updatedAt,
+      author->{
+        _id,
+        name,
+        image
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: limit,
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      },
-      author: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
+      categories[]->{
+        _id,
+        name,
+        slug
+      }
+    }
+  `,
+    { postId, categoryIds }
+  );
 
-  return posts.map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-    updatedAt: post.updatedAt.toISOString(),
-  }));
+  return relatedPosts.map(mapPost);
 }
+
+// Eksportuj typy lub interfejsy z tego pliku, aby inne pliki mogły je importować
+export type { Post };

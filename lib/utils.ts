@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import { pl } from "date-fns/locale/pl";
+import pl from "date-fns/locale/pl";
 import slugify from "slugify";
 
 /**

@@ -13,6 +13,8 @@
 @import "components/hero";
 @import "components/blog-card";
 @import "components/glitch-effect"; // Import stylów dla efektu glitch
+@import "components/blog-post"; // Nowy import dla stylów pojedynczego posta
+
 // Pages
 @import "pages/home";
 @import "pages/blog";

@@ -17,10 +17,13 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@portabletext/react": "^3.2.1",
     "@prisma/client": "^6.4.1",
+    "@sanity/image-url": "^1.1.0",
     "bcrypt": "^5.1.1",
     "date-fns": "^3.3.1",
-    "next": "14.1.0",
+    "next": "^15.2.1",
+    "next-sanity": "^9.9.0",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
