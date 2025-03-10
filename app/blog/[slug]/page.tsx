@@ -39,6 +39,7 @@ export default async function BlogPostPage({
   params,
 }: {
   params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   try {
     const post = await getPostBySlug(params.slug);
