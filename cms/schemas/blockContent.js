@@ -1,3 +1,4 @@
+// cms/schemas/blockContent.js
 export default {
   title: 'Block Content',
   name: 'blockContent',
@@ -23,6 +24,8 @@ export default {
           {title: 'Strong', value: 'strong'},
           {title: 'Emphasis', value: 'em'},
           {title: 'Code', value: 'code'},
+          {title: 'Underline', value: 'underline'},
+          {title: 'Strike through', value: 'strike-through'},
         ],
         annotations: [
           {
@@ -37,7 +40,14 @@ export default {
                 validation: (Rule) =>
                   Rule.uri({
                     scheme: ['http', 'https', 'mailto', 'tel'],
+                    allowRelative: true,
                   }),
+              },
+              {
+                title: 'Open in new tab',
+                name: 'blank',
+                type: 'boolean',
+                initialValue: false,
               },
             ],
           },
@@ -47,6 +57,25 @@ export default {
     {
       type: 'image',
       options: {hotspot: true},
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative text',
+          description: 'Important for SEO and accessibility',
+          options: {
+            isHighlighted: true,
+          },
+        },
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          options: {
+            isHighlighted: true,
+          },
+        },
+      ],
     },
     {
       type: 'code',
@@ -60,8 +89,6 @@ export default {
           {title: 'TypeScript', value: 'typescript'},
           {title: 'JSX', value: 'jsx'},
           {title: 'JSON', value: 'json'},
-          {title: 'PHP', value: 'php'},
-          {title: 'Python', value: 'python'},
           {title: 'Bash', value: 'bash'},
           {title: 'Markdown', value: 'markdown'},
         ],

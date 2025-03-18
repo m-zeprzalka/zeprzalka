@@ -1,0 +1,195 @@
+// styles/components/_portable-text.scss
+
+.portable-text {
+  // Podstawowe style dla tekstu
+  line-height: 1.6;
+  color: #000;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  // Nagłówki
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    @media (min-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    margin-top: 1.75rem;
+    @media (min-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    @media (min-width: 768px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    @media (min-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  // Paragraf
+  p {
+    margin-bottom: 1rem;
+    @media (min-width: 768px) {
+      margin-bottom: 1.5rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Linki
+  &__link {
+    color: #0066cc;
+    text-decoration: underline;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #004499;
+      text-decoration: none;
+    }
+  }
+
+  // Formatowanie tekstu
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  code {
+    font-family: monospace;
+    padding: 0.2em 0.4em;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    white-space: break-spaces;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  s,
+  strike {
+    text-decoration: line-through;
+  }
+
+  // Listy
+  &__list {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+
+    &--bullet {
+      list-style-type: disc;
+    }
+
+    &--number {
+      list-style-type: decimal;
+    }
+
+    &-item {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Bloki kodu
+  &__code {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+
+    code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+  }
+
+  // Cytaty
+  blockquote {
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-left: 3px solid #0066cc;
+    font-style: italic;
+    color: #333;
+
+    p {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // Obrazy
+  &__figure {
+    margin: 1.5rem 0;
+    display: block;
+    width: 100%;
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    display: block;
+  }
+
+  &__caption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+  }
+
+  // Media queries dla lepszej responsywności
+  @media (min-width: 768px) {
+    &__code {
+      margin: 2rem 0;
+      padding: 1.25rem;
+    }
+
+    &__figure {
+      margin: 2rem 0;
+    }
+  }
+}
