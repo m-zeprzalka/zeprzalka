@@ -20,7 +20,7 @@ export default function AuthorCard({ author }: AuthorCardProps) {
       <div className="blog-post__author-avatar">
         {author.image ? (
           <Image
-            src={author.image}
+            src="/face-beta-min.webp"
             alt={authorName}
             width={80}
             height={80}

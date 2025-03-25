@@ -145,7 +145,7 @@ export default async function BlogPostPage({
               <div className="blog-post__author">
                 <div className="blog-post__author-image">
                   <Image
-                    src="/images/avatar.jpg"
+                    src="/face-beta-min.webp"
                     alt="Michał Zeprzałka"
                     width={60}
                     height={60}
@@ -155,8 +155,8 @@ export default async function BlogPostPage({
                 <div className="blog-post__author-info">
                   <h3 className="blog-post__author-name">Michał Zeprzałka</h3>
                   <p className="blog-post__author-bio">
-                    Ekspert w dziedzinie marketingu i pozycjonowania. Pomagam
-                    firmom zwiększać widoczność online.
+                    Specjalista w dziedzinie AI, Programowania, UX/UI, Motion
+                    Design
                   </p>
                 </div>
               </div>

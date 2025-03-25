@@ -38,8 +38,7 @@ export default function BlogSidebar({
                 Michał Zeprzałka
               </h3>
               <p className="blog-post__sidebar-author-bio">
-                Ekspert w dziedzinie marketingu i pozycjonowania. Pomagam firmom
-                zwiększać widoczność online.
+                Specjalista w dziedzinie AI, Programowania, UX/UI, Motion Design
               </p>
             </div>
           </div>
